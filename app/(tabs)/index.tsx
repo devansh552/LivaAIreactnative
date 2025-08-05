@@ -17,6 +17,28 @@ export default function HomeScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
+  const clearStorage = async () => {
+    await SecureStore.deleteItemAsync('userId');
+    await SecureStore.deleteItemAsync('userData');
+    console.log('SecureStore cleared');
+  };
+
+  // 🔥 uncomment to clear once
+  //clearStorage();
+}, []);
+
+
+
+  useEffect(() => {
+    SecureStore.getItemAsync('userId').then(val =>
+      console.log('[HomeScreen] SecureStore userId:', val)
+    );
+    SecureStore.getItemAsync('userData').then(val =>
+      console.log('[HomeScreen] SecureStore userData:', val)
+    );
+  }, []);
+
+  useEffect(() => {
     (async () => {
       const storedUserData = await SecureStore.getItemAsync('userData');
       console.log('Stored userData:', storedUserData);
@@ -49,22 +71,32 @@ export default function HomeScreen() {
   }, []);
 
   const guestLogin = async (userId: string) => {
-    try {
-      console.log('Attempting guest login with userId:', userId);
-      const response = await axiosChat.post('/initialize-guest-user', { userId });
-      console.log('Guest login response:', response.data);
-      setUserData(response.data);
-      await SecureStore.setItemAsync('userData', JSON.stringify(response.data));
-    } catch (err) {
-      console.log('Guest login error:', err);
-      if (err && typeof err === 'object' && 'message' in err) {
-        setErrorMsg('Guest login error: ' + (err as { message: string }).message);
-      } else {
-        setErrorMsg('Guest login error: Unknown error');
-      }
-      setLoading(false);
+  try {
+    console.log('Attempting guest login with userId:', userId);
+    const response = await axiosChat.post('/initialize-guest-user', { userId });
+
+    const completeUserData = {
+      ...response.data,
+      userId, // ensure userId is included
+    };
+
+    console.log('Guest login response with ensured userId:', completeUserData);
+
+    setUserData(completeUserData);
+
+    await SecureStore.setItemAsync('userData', JSON.stringify(completeUserData));
+    await SecureStore.setItemAsync('userId', userId); // persist explicitly too
+  } catch (err) {
+    console.log('Guest login error:', err);
+    if (err && typeof err === 'object' && 'message' in err) {
+      setErrorMsg('Guest login error: ' + (err as { message: string }).message);
+    } else {
+      setErrorMsg('Guest login error: Unknown error');
     }
-  };
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     if (!userData || !userData.userId) return;
@@ -75,17 +107,15 @@ export default function HomeScreen() {
         setLoading(false);
       })
       .catch((err: any) => {
+        console.error('Failed to fetch config:', err);
+        setErrorMsg('Failed to fetch config: ' + (err?.message || 'Unknown error'));
         setErrorMsg('Failed to fetch config: ' + err.message);
         setAgents([]);
         setLoading(false);
       });
   }, [userData]);
 
-  useEffect(() => {
-    SecureStore.setItemAsync('test', '123').then(() => {
-      SecureStore.getItemAsync('test').then(val => console.log('SecureStore test value:', val));
-    });
-  }, []);
+  
 
   if (loading) {
     return (
@@ -110,7 +140,7 @@ export default function HomeScreen() {
       </View>
     );
   }
-
+AgentSelection
   return (
     <AgentSelection
       agents={agents}
