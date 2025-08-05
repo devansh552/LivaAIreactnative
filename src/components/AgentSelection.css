@@ -1,0 +1,129 @@
+/* Container for AgentSelection */
+.agent-selection-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center; /* Base style, will be overridden for mobile */
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #191a1b;
+}
+
+/* Main content area */
+.agent-selection-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centers h1 and grid within this content block */
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Heading within the content area */
+.agent-selection-content h1 {
+  margin-bottom: 30px;
+  color: #ffffff;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+/* Grid container for agents */
+.agents-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Individual agent box */
+.agent-box {
+  width: calc((100% - 60px) / 3);
+  aspect-ratio: 1 / 1;
+  max-width: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.agent-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Agent image styling */
+.agent-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+
+/* Overlay for agent name */
+.agent-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.agent-overlay h3 {
+  margin: 0;
+  font-size: 28px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .agent-selection-container {
+    padding: 30px 10px 10px; /* Current top padding provides initial space */
+    background-color: #191a1b;
+    justify-content: flex-start; /* THIS IS THE KEY CHANGE: Aligns content to the top */
+    /* The inherited height: 100% remains. If this leads to issues with viewport height on mobile,
+       consider alternatives like min-height: 100vh; height: auto; but flex-start is the first step. */
+  }
+
+  .agent-selection-content h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+  }
+
+  .agent-selection-content {
+    align-items: center;
+    margin-left: 0;
+    /* justify-content: center; from base style for this element will ensure h1 & grid are centered if content is short, or starts at top if content is tall. This should be fine. */
+  }
+
+  .agents-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .agent-box {
+    width: 90%;
+    aspect-ratio: 1 / 1;
+    max-width: none;
+  }
+
+  .agent-image {
+    height: 100%;
+  }
+
+  .agent-overlay h3 {
+    font-size: 24px;
+  }
+}

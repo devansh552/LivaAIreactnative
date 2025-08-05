@@ -1,0 +1,470 @@
+/* AgentChat.css */
+
+/* Global Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Root Content Container */
+.content {
+  display: flex;
+  flex: 1;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden;
+  transition: none;
+}
+.share-button {
+  position: absolute;
+  top: 10px;      /* aligns it with the other buttons */
+  right: 160px;     /* adjust this value so it sits next to your toggle buttons */
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10;
+}
+/* Left Pane: Video Canvas and Placeholder */
+.video-canvas-panel {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  position: relative;
+  min-width: 600px;
+  gap: 10px;
+  flex-direction: row;
+  transition: none;
+}
+
+/* Full-Screen Video Canvas when Chat is Hidden */
+.video-canvas-panel.full-screen {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* Canvas wrappers */
+.video-canvas-wrapper,
+.placeholder-canvas {
+  flex: 1 1 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  position: relative;
+}
+
+/* Video Canvas Container */
+.video-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-canvas {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.placeholder-canvas .placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-canvas .placeholder-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+/* Navigation Buttons for Image History */
+.image-nav-buttons-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+}
+
+.image-nav-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.image-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.image-nav-button:disabled {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: not-allowed;
+}
+
+/* Toggle Layout and Chat Buttons */
+.toggle-layout-button,
+.toggle-chat-button {
+  position: absolute;
+  top: 10px;
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 10;
+}
+
+.toggle-layout-button {
+  right: 105px;
+}
+
+.toggle-chat-button {
+  right: 60px;
+}
+
+.toggle-layout-button.layout-on {
+  background-color: #fcfcfc;
+}
+
+.toggle-layout-button.layout-off {
+  background-color: #b1b1b1;
+}
+
+.toggle-chat-button.chat-on {
+  background-color: #fcfcfc;
+}
+
+.toggle-chat-button.chat-off {
+  background-color: #b1b1b1;
+}
+
+/* Subtitles Overlay */
+.subtitles {
+  position: absolute;
+  bottom: 70px; /* Adjust this value to float above the footer/center input */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 90%;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  padding: 5px 10px;
+  z-index: 9;
+}
+
+/* Right Pane: Chat Panel */
+.chat-panel {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f0f0;
+  min-width: 300px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.chat-panel.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-panel.hidden ~ .video-canvas-panel {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* Chat Box */
+.chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #ebebeb;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 60%;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.message.sent {
+  background-color: #87a1f5;
+  color: rgb(0, 0, 0);
+  align-self: flex-end;
+  box-shadow: 2px 4px 8px rgba(0.05, 0.05, 0.05, 0.05);
+}
+
+.message.received {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  align-self: flex-start;
+  box-shadow: 2px 4px 8px rgba(0.05, 0.05, 0.05, 0.05);
+}
+
+/* Chat Input */
+.chat-input {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+  align-items: center;
+}
+
+.chat-input input,
+.chat-input button {
+  height: 30px;
+  font-size: 12px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chat-input .mic-button {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* MODIFICATION: Added transition for transform */
+  transition: background-color 0.2s, color 0.2s, transform 0.2s ease-in-out;
+}
+
+/* NEW: Added rule for scaling the mic button when pressed */
+.chat-input .mic-button:active {
+  transform: scale(1.5);
+}
+
+.chat-input .mic-button.recording {
+  background-color: red;
+  color: white;
+}
+
+.chat-input .mic-button:hover {
+  background-color: #ddd;
+}
+
+.chat-input .mic-button.recording:hover {
+  background-color: darkred;
+}
+
+.chat-input button:not(.mic-button) {
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #87a1f5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Center Input Panel (Overlay) */
+.center-input-panel {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background-color: rgba(248, 0, 0, 0);
+  padding: 8px 12px;
+  border-radius: 30px;
+  z-index: 11;
+  max-width: 90%;
+  overflow: hidden;
+}
+
+/* Center mic button */
+.center-mic-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #87a1f5;
+  color: white;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
+  /* MODIFICATION: Added transition for transform */
+  transition: transform 0.2s ease-in-out, background-color 0.2s;
+}
+
+/* NEW: Added rule for scaling the center mic button when pressed */
+.center-mic-button:active {
+  transform: scale(1.5);
+}
+
+
+.center-mic-button.recording {
+  background-color: red;
+}
+
+/* Center chat input wrapper */
+.center-chat-input-wrapper {
+  width: 100%;
+  flex: 1;
+}
+
+/* Center chat input */
+.center-chat-input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* Center send button */
+.center-send-button {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 100%;
+}
+
+/* Responsive: Mobile view adjustments */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    height: calc(var(--vh, 1vh) * 100);
+    transition: none;
+  }
+  .video-canvas-panel {
+    flex-direction: column;
+    height: 60vh;
+    flex: 0 0 60vh;
+    min-width: 0;
+    gap: 0;
+    overflow: hidden;
+    transition: none;
+  }
+  .video-canvas-wrapper,
+  .placeholder-canvas {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  .video-canvas,
+  .placeholder-canvas .placeholder-image img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .chat-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .chat-panel.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  .mobile-back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    z-index: 101;
+    cursor: pointer;
+  }
+  .mobile-back-button-text {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+  .center-input-panel.mobile {
+    position: static;
+    transform: none;
+    border-radius: 0;
+    padding: 18px 12px;
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fff;
+  }
+}
