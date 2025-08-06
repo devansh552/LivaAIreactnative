@@ -2,8 +2,6 @@
 import { Stack, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
-import LoginButton from './LoginButton';
-import LoginPopup from './LoginPopup';
 
 type UserData = {
   name: string;
@@ -43,17 +41,17 @@ export default function RootLayout() {
           //     <Text style={{ marginLeft: 16 }}>🏠 Home</Text>
           //   </Pressable>
           // ),
-          headerRight: () => (
-            <LoginButton onOpenLogin={() => setShowLoginModal(true)} />
-          ),
+          // headerRight: () => (
+          //   <LoginButton onOpenLogin={() => setShowLoginModal(true)} />
+          // ),
         }}
       />
-      {showLoginModal && (
+      {/* {showLoginModal && (
         <LoginPopup
           onClose={() => setShowLoginModal(false)}
           onAuthSuccess={handleAuthSuccess}
         />
-      )}
+      )} */}
     </>
   );
 }

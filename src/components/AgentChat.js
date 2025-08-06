@@ -7,22 +7,22 @@ import {
 } from 'react';
 import { Dimensions, Image, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
-import axiosChat from '../axiosChat';
-import useMicrophoneRecording from '../hooks/useMicrophoneRecording';
-import useScreenRecording from '../hooks/useScreenRecording';
-import useVideoCanvasSpriteLoader from '../hooks/useVideoCanvasSpriteLoader';
-import { error } from '../utils/logger';
-import FirstTimeHelpTooltip from './FirstTimeHelpTooltip';
-import SharePopup from './SharePopup';
-import UserProfileIcon from './UserProfileIcon';
-import VideoCanvas from './VideoCanvas';
+import axiosChat from '../../src/axiosChat';
+import FirstTimeHelpTooltip from '../../src/components/FirstTimeHelpTooltip';
+import SharePopup from '../../src/components/SharePopup';
+import UserProfileIcon from '../../src/components/UserProfileIcon';
+import VideoCanvas from '../../src/components/VideoCanvas';
+import useMicrophoneRecording from '../../src/hooks/useMicrophoneRecording';
+import useScreenRecording from '../../src/hooks/useScreenRecording';
+import useVideoCanvasSpriteLoader from '../../src/hooks/useVideoCanvasSpriteLoader';
+import { error } from '../../src/utils/logger';
 
-const placeholderImageAsset = require('../../assets/media-default-image.jpg');
-const micOnIcon = require('../../assets/icons/mic_on_black.png');
-const micOffIcon = require('../../assets/icons/mic_off_black.png');
-const mediaIcon = require('../../assets/icons/media_black.png');
-const chatIcon = require('../../assets/icons/chat_black.png');
-const sendIcon = require('../../assets/icons/send_message_black.png');
+const placeholderImageAsset = require('../../../assets/media-default-image.jpg');
+const micOnIcon = require('../../../assets/Icons/mic_on_black.png');
+const micOffIcon = require('../../../assets/Icons/mic_off_black.png');
+const mediaIcon = require('../../../assets/Icons/media_black.png');
+const chatIcon = require('../../../assets/Icons/chat_black.png');
+const sendIcon = require('../../../assets/Icons/send_message_black.png');
 
 const AgentChat = ({
   currentAgent,

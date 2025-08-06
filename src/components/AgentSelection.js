@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 const placeholderProfile = require('../../assets/placeholder-profile.png'); // Place your placeholder image in assets
 
 const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
@@ -20,10 +20,17 @@ const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
             );
             if (response.ok) {
               const blob = await response.blob();
-              // React Native does not support URL.createObjectURL, so use a workaround:
-              // Save the blob to a file and get its URI, or use a remote URL if your backend supports it.
-              // For now, fallback to placeholder.
-              newProfileImages[agent.id] = null;
+              // Convert blob to base64
+              const reader = new FileReader();
+              reader.onloadend = async () => {
+                const base64data = reader.result.split(',')[1];
+                // Save to file
+                const fileUri = `${FileSystem.cacheDirectory}${agent.id}.png`;
+                await FileSystem.writeAsStringAsync(fileUri, base64data, { encoding: FileSystem.EncodingType.Base64 });
+                newProfileImages[agent.id] = fileUri;
+                setProfileImages((prev) => ({ ...prev, [agent.id]: fileUri }));
+              };
+              reader.readAsDataURL(blob);
             } else {
               newProfileImages[agent.id] = null;
             }
@@ -32,7 +39,7 @@ const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
           }
         })
       );
-      setProfileImages(newProfileImages);
+      // setProfileImages(newProfileImages); // Already set inside reader.onloadend
     };
     if (agents.length > 0) fetchProfileImages();
   }, [agents]);
@@ -75,22 +82,21 @@ const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.heading}>Live Video Agents</Text>
-        {agents.length > 0 ? (
-          <FlatList
-            data={agents}
-            renderItem={renderAgent}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={numColumns}
-            contentContainerStyle={styles.grid}
-          />
-        ) : (
-          <Text style={styles.noAgentsText}>
-            No agents are currently online. Please try again later.
-          </Text>
-        )}
-      </View>
+      <Text style={styles.heading}>Live Video Agents</Text>
+      {agents.length > 0 ? (
+        <FlatList
+          data={agents}
+          renderItem={renderAgent}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={1}
+          contentContainerStyle={styles.grid}
+          showsVerticalScrollIndicator={true}
+        />
+      ) : (
+        <Text style={styles.noAgentsText}>
+          No agents are currently online. Please try again later.
+        </Text>
+      )}
     </View>
   );
 };
@@ -99,16 +105,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#191a1b',
-    alignItems: 'center',
-    padding: 20,
-    justifyContent: 'center',
-  },
-  content: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    maxWidth: 1200,
     width: '100%',
+    justifyContent: 'flex-start',
+    padding: 0,
   },
   heading: {
     marginBottom: 30,
@@ -119,18 +118,18 @@ const styles = StyleSheet.create({
   },
   grid: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 30,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    paddingBottom: 40, // Extra space for scrolling
   },
   agentBox: {
-    flex: 1,
-    aspectRatio: 1,
-    maxWidth: 380,
+    width: '90%',
+    height: 340,
     borderRadius: 20,
     overflow: 'hidden',
     backgroundColor: '#ffffff',
-    margin: 10,
+    marginVertical: 20,
+    alignSelf: 'center',
     elevation: 4,
     position: 'relative',
     alignItems: 'center',
