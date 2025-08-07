@@ -1,11 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 const placeholderProfile = require('../../assets/placeholder-profile.png'); // Place your placeholder image in assets
 
 const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
-  const navigation = useNavigation();
+  const router = useRouter();
   const [profileImages, setProfileImages] = useState({});
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const AgentSelection = ({ agents, setCurrentAgent, userId, onGuestLogin }) => {
       }
     }
     setCurrentAgent(agent);
-    navigation.navigate('AgentChat', { agentId: agent.id });
+    router.push({ pathname: '/(tabs)/AgentChat', params: { agentId: agent.id } });
   };
 
   const numColumns = Dimensions.get('window').width > 768 ? 3 : 1;

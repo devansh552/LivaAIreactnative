@@ -1,11 +1,11 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useLocalSearchParams } from 'expo-router';
 import {
   useEffect,
   useMemo,
   useRef,
   useState
 } from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, KeyboardAvoidingView, Modal, Platform, Image as RNImage, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import axiosChat from '../../src/axiosChat';
 import FirstTimeHelpTooltip from '../../src/components/FirstTimeHelpTooltip';
@@ -17,12 +17,12 @@ import useScreenRecording from '../../src/hooks/useScreenRecording';
 import useVideoCanvasSpriteLoader from '../../src/hooks/useVideoCanvasSpriteLoader';
 import { error } from '../../src/utils/logger';
 
-const placeholderImageAsset = require('../../../assets/media-default-image.jpg');
-const micOnIcon = require('../../../assets/Icons/mic_on_black.png');
-const micOffIcon = require('../../../assets/Icons/mic_off_black.png');
-const mediaIcon = require('../../../assets/Icons/media_black.png');
-const chatIcon = require('../../../assets/Icons/chat_black.png');
-const sendIcon = require('../../../assets/Icons/send_message_black.png');
+const placeholderImageAsset = require('../../assets/media_default_image.jpg');
+const micOnIcon = require('../../assets/Icons/mic_on_black.png');
+const micOffIcon = require('../../assets/Icons/mic_off_black.png');
+const mediaIcon = require('../../assets/Icons/media_black.png');
+const chatIcon = require('../../assets/Icons/chat_black.png');
+const sendIcon = require('../../assets/Icons/send_message_black.png');
 
 const AgentChat = ({
   currentAgent,
@@ -36,9 +36,10 @@ const AgentChat = ({
   userData,
   onSignOut
 }) => {
-  const navigation = useNavigation();
+  const { agentId } = useLocalSearchParams();
+  // const navigation = useNavigation();
   const route = useRoute();
-  const { agentId } = route.params || {};
+  //const { agentId } = route.params || {};
 
   // Responsive
   const [isMobile, setIsMobile] = useState(Dimensions.get('window').width <= 768);
@@ -229,7 +230,7 @@ const AgentChat = ({
         </View>
         {layout === '1' && (
           <View style={styles.placeholderCanvas}>
-            <Image source={placeholderImage} style={styles.placeholderImage} />
+            <RNImage source={placeholderImage} style={styles.placeholderImage} />
             {imageHistory.length > 1 && (
               <View style={styles.imageNavButtons}>
                 <TouchableOpacity onPress={handlePrev} disabled={currentImageIndex >= imageHistory.length - 1}>
