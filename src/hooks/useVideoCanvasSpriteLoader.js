@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { error, warn } from '../utils/logger';
-
+// filepath: /Users/cccm1/AnnaOSMobile/app/(tabs)/AgentChat.js
 // Defines the exact order in which animations will be requested and loaded.
 const ANIMATION_LOAD_ORDER = ['Idle_1', 'Talking_1', 'TR_1', 'TR_2'];
 const IDLE_ANIMATION = 'Idle_1';

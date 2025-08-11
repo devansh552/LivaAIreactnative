@@ -6,16 +6,18 @@ import {
   useState
 } from 'react';
 import { Dimensions, KeyboardAvoidingView, Modal, Platform, Image as RNImage, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import VideoCanvas from '../../components/RNVideoCanvas';
 import axiosChat from '../../src/axiosChat';
 import FirstTimeHelpTooltip from '../../src/components/FirstTimeHelpTooltip';
 import SharePopup from '../../src/components/SharePopup';
 import UserProfileIcon from '../../src/components/UserProfileIcon';
-import VideoCanvas from '../../src/components/VideoCanvas';
 import useMicrophoneRecording from '../../src/hooks/useMicrophoneRecording';
 import useScreenRecording from '../../src/hooks/useScreenRecording';
 import useVideoCanvasSpriteLoader from '../../src/hooks/useVideoCanvasSpriteLoader';
 import { error } from '../../src/utils/logger';
+;
 
 const placeholderImageAsset = require('../../assets/media_default_image.jpg');
 const micOnIcon = require('../../assets/Icons/mic_on_black.png');
@@ -38,7 +40,7 @@ const AgentChat = ({
 }) => {
   const { agentId } = useLocalSearchParams();
   // const navigation = useNavigation();
-  const route = useRoute();
+  
   //const { agentId } = route.params || {};
 
   // Responsive
@@ -202,10 +204,10 @@ const AgentChat = ({
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>S</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.toggleButton} onPress={toggleLayout}>
-          <Image source={mediaIcon} style={styles.icon} />
+          <RNImage source={mediaIcon} style={styles.icon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.toggleButton} onPress={toggleChatAndCenterInput}>
-          <Image source={chatIcon} style={styles.icon} />
+          <RNImage source={chatIcon} style={styles.icon} />
         </TouchableOpacity>
         {userData && <UserProfileIcon userData={userData} onSignOut={onSignOut} />}
       </View>
@@ -264,7 +266,7 @@ const AgentChat = ({
             }}
             onPressOut={stopMicRecording}
           >
-            <Image
+            <RNImage
               source={isRecording ? micOffIcon : micOnIcon}
               style={styles.micIcon}
             />
@@ -279,7 +281,7 @@ const AgentChat = ({
               ref={inputRef}
             />
             <TouchableOpacity style={styles.centerSendButton} onPress={sendCenterMessage}>
-              <Image source={sendIcon} style={styles.sendIcon} />
+              <RNImage source={sendIcon} style={styles.sendIcon} />
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -303,7 +305,7 @@ const AgentChat = ({
               }}
               onPressOut={stopMicRecording}
             >
-              <Image
+              <RNImage
                 source={isRecording ? micOffIcon : micOnIcon}
                 style={styles.micIcon}
               />
@@ -317,7 +319,7 @@ const AgentChat = ({
               ref={inputRef}
             />
             <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-              <Image source={sendIcon} style={styles.sendIcon} />
+              <RNImage source={sendIcon} style={styles.sendIcon} />
             </TouchableOpacity>
           </View>
         </View>
